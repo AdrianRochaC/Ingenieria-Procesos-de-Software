@@ -1,4 +1,3 @@
-import email
 import os
 from flask import Flask, request, render_template, session, redirect
 import pandas as pd
@@ -43,8 +42,7 @@ def verify_google_token(token):
         )
 
         # Validar dominio Workspace
-        email = idinfo.get("email")
-        if not email.endswith("@" + ALLOWED_DOMAIN):
+        if idinfo.get("hd") != ALLOWED_DOMAIN:
             return None
 
         return idinfo
