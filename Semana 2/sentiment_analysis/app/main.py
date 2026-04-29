@@ -1,5 +1,4 @@
 import os
-import logging
 from flask import Flask, request, render_template, session, redirect
 import pandas as pd
 import matplotlib
@@ -20,118 +19,75 @@ from text_utils import (
     PALABRAS_GENERICAS
 )
 
-# ==========================================
-# 1. BIENVENIDA Y CONFIGURACIÓN DE LOGS
-# ==========================================
-print("\n" + "="*50)
-print("  BIENVENIDO AL SISTEMA DE ANÁLISIS DE SENTIMIENTOS")
-print("  Iniciando servicios y verificando configuración...")
-print("="*50 + "\n")
-
-logging.basicConfig(
-    level=logging.DEBUG,
-    format='%(asctime)s [%(levelname)s] %(message)s',
-    datefmt='%H:%M:%S'
-)
-logger = logging.getLogger(__name__)
-
 # ==============================
-# 2. CONFIGURACIÓN APP
+# CONFIGURACIÓN APP
 # ==============================
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "super-secret-key")
 
 GOOGLE_CLIENT_ID = os.environ.get("GOOGLE_CLIENT_ID")
-ALLOWED_DOMAIN = "gmail.com" 
-
-# Verificación de ID de Google
-if not GOOGLE_CLIENT_ID:
-    logger.error("¡ALERTA! GOOGLE_CLIENT_ID no detectado en variables de entorno.")
-else:
-    logger.info(f"Configuración cargada correctamente. ID: {GOOGLE_CLIENT_ID[:15]}...")
+ALLOWED_DOMAIN = "gmail.com"  # Cambia esto por tu dominio de Workspace si es necesario
 
 # ==============================
-# 3. VALIDAR TOKEN GOOGLE
+# VALIDAR TOKEN GOOGLE
 # ==============================
 
 def verify_google_token(token):
     try:
-        logger.debug("Verificando autenticidad del token con Google APIs...")
-        
         idinfo = id_token.verify_oauth2_token(
             token,
             grequests.Request(),
             GOOGLE_CLIENT_ID
         )
 
-        user_email = idinfo.get("email", "")
-        user_domain = idinfo.get("hd")
-        
-        logger.debug(f"Datos recibidos de Google -> Email: {user_email} | Dominio(hd): {user_domain}")
-
-        # Validación de dominio
-        if ALLOWED_DOMAIN == "gmail.com":
-            if not user_email.endswith("@gmail.com"):
-                logger.warning(f"Acceso denegado: El correo {user_email} no es @gmail.com")
-                return None
-        elif user_domain != ALLOWED_DOMAIN:
-            logger.warning(f"Acceso denegado: El dominio {user_domain} no es el autorizado.")
+        # Validar dominio Workspace
+        if idinfo.get("hd") != ALLOWED_DOMAIN:
             return None
 
         return idinfo
 
-    except ValueError as e:
-        logger.error(f"El token es inválido o expiró: {e}")
-        return None
     except Exception as e:
-        logger.error(f"Error crítico validando token: {e}", exc_info=True)
+        print("Error validando token:", e)
         return None
 
+
 # ==============================
-# 4. RUTAS DE AUTENTICACIÓN
+# LOGIN
 # ==============================
 
 @app.route("/login", methods=["POST"])
 def login():
-    try:
-        data = request.get_json()
-        token = data.get("credential")
+    data = request.get_json()
+    token = data.get("credential")
 
-        if not token:
-            logger.warning("Intento de login sin credenciales.")
-            return {"status": "no_token"}, 400
+    user_info = verify_google_token(token)
 
-        user_info = verify_google_token(token)
-
-        if user_info:
-            session["user"] = {
-                "name": user_info.get("name"),
-                "email": user_info.get("email"),
-                "picture": user_info.get("picture")
-            }
-            logger.info(f"SESIÓN INICIADA: {user_info.get('email')}")
-            return {"status": "success"}
-        
+    if user_info:
+        session["user"] = {
+            "name": user_info.get("name"),
+            "email": user_info.get("email"),
+            "picture": user_info.get("picture")
+        }
+        return {"status": "success"}
+    else:
         return {"status": "unauthorized"}, 401
-            
-    except Exception as e:
-        logger.error(f"Error en ruta /login: {e}")
-        return {"status": "error"}, 500
+
 
 @app.route("/logout")
 def logout():
-    logger.info(f"Cerrando sesión para: {session.get('user', {}).get('email')}")
     session.clear()
     return redirect("/")
 
+
 # ==============================
-# 5. RUTA PRINCIPAL Y LÓGICA
+# RUTA PRINCIPAL
 # ==============================
 
 @app.route("/", methods=["GET", "POST"])
 def analizar_estados():
 
+    # GET → Mostrar login o formulario
     if request.method == "GET":
         return render_template(
             "index.html",
@@ -139,89 +95,76 @@ def analizar_estados():
             user=session.get("user")
         )
 
+    # POST → Validar sesión
     if "user" not in session:
-        logger.warning("Acceso denegado: Usuario no autenticado intentó procesar archivo.")
         return redirect("/")
 
-    try:
-        archivo = request.files.get("file")
-        if not archivo:
-            return "No se subió ningún archivo", 400
+    archivo = request.files["file"]
+    df = pd.read_excel(archivo)
 
-        logger.info(f"Procesando archivo '{archivo.filename}' de: {session['user']['email']}")
-        
-        df = pd.read_excel(archivo)
+    if df.shape[1] != 1:
+        return "El archivo debe tener una sola columna", 400
 
-        if df.shape[1] != 1:
-            logger.error("Error: El archivo subido tiene más de una columna.")
-            return "El archivo debe tener una sola columna", 400
+    serie = df.iloc[:, 0].dropna().astype(str)
+    serie = serie.apply(normalizar_texto)
+    serie = serie[~serie.isin(PALABRAS_GENERICAS)]
+    serie = serie[~serie.apply(es_solo_simbolos)]
+    serie = serie[~serie.apply(es_texto_basura)]
+    serie = serie[serie.apply(tiene_palabras_validas)]
 
-        # Limpieza de datos
-        serie = df.iloc[:, 0].dropna().astype(str)
-        total_inicial = len(serie)
-        
-        serie = serie.apply(normalizar_texto)
-        serie = serie[~serie.isin(PALABRAS_GENERICAS)]
-        serie = serie[~serie.apply(es_solo_simbolos)]
-        serie = serie[~serie.apply(es_texto_basura)]
-        serie = serie[serie.apply(tiene_palabras_validas)]
+    sentimientos = serie.apply(analizar_sentimiento)
 
-        logger.debug(f"Filas procesadas: de {total_inicial} bajó a {len(serie)} tras limpieza.")
+    resultado_df = pd.DataFrame({
+        "comentario": serie.values,
+        "sentimiento": sentimientos.values
+    })
 
-        if len(serie) == 0:
-            return "No hay datos válidos tras la limpieza.", 400
+    conteo = resultado_df["sentimiento"].value_counts()
+    total = conteo.sum()
+    porcentajes = (conteo / total * 100).round(1)
 
-        # Análisis
-        sentimientos = serie.apply(analizar_sentimiento)
+    colores = {
+        "Positivo": "#4CAF50",
+        "Neutral": "#BDBDBD",
+        "Negativo": "#E53935"
+    }
 
-        resultado_df = pd.DataFrame({
-            "comentario": serie.values,
-            "sentimiento": sentimientos.values
-        })
+    fig, ax = plt.subplots(figsize=(8, 5))
+    bars = ax.bar(conteo.index, conteo.values,
+                  color=[colores[i] for i in conteo.index])
 
-        conteo = resultado_df["sentimiento"].value_counts()
-        total = conteo.sum()
-        porcentajes = (conteo / total * 100).round(1)
-
-        # Gráfico
-        colores = {"Positivo": "#4CAF50", "Neutral": "#BDBDBD", "Negativo": "#E53935"}
-        fig, ax = plt.subplots(figsize=(8, 5))
-        bars = ax.bar(conteo.index, conteo.values, color=[colores.get(i, "#000") for i in conteo.index])
-
-        for bar, p in zip(bars, porcentajes):
-            ax.text(bar.get_x() + bar.get_width()/2, bar.get_height() + 0.1, f"{p}%", ha="center", weight="bold")
-
-        img = BytesIO()
-        plt.tight_layout()
-        plt.savefig(img, format="png")
-        img.seek(0)
-        grafico = base64.b64encode(img.getvalue()).decode()
-        plt.close(fig) # Liberar memoria
-
-        # Excel
-        excel = BytesIO()
-        resultado_df.to_excel(excel, index=False)
-        excel.seek(0)
-        excel_b64 = base64.b64encode(excel.getvalue()).decode()
-
-        logger.info("Análisis finalizado con éxito.")
-        
-        return render_template(
-            "result.html",
-            total=total,
-            grafico=grafico,
-            excel=excel_b64,
-            user=session.get("user")
+    for bar, p in zip(bars, porcentajes):
+        ax.text(
+            bar.get_x() + bar.get_width()/2,
+            bar.get_height() + 0.2,
+            f"{p}%",
+            ha="center",
+            weight="bold"
         )
-    except Exception as e:
-        logger.error(f"Error procesando el análisis: {e}", exc_info=True)
-        return "Error interno al procesar el archivo.", 500
+
+    img = BytesIO()
+    plt.tight_layout()
+    plt.savefig(img, format="png")
+    img.seek(0)
+    grafico = base64.b64encode(img.getvalue()).decode()
+
+    excel = BytesIO()
+    resultado_df.to_excel(excel, index=False)
+    excel.seek(0)
+    excel_b64 = base64.b64encode(excel.getvalue()).decode()
+
+    return render_template(
+        "result.html",
+        total=total,
+        grafico=grafico,
+        excel=excel_b64,
+        user=session.get("user")
+    )
+
 
 # ==============================
-# 6. EJECUCIÓN
+# RUN CLOUD RUN
 # ==============================
 
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 8080))
-    logger.info(f"Servidor listo en puerto {port}")
-    app.run(host="0.0.0.0", port=port)
+    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 8080)))
