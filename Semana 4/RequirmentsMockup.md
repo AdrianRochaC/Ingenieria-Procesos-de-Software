@@ -4,7 +4,7 @@
 
 ProjectHub es una plataforma web moderna orientada a la publicación, exploración y organización de proyectos digitales, mockups, prototipos e ideas creativas. La plataforma busca ofrecer un espacio visual e interactivo donde diseñadores, desarrolladores y creadores puedan compartir sus proyectos, descubrir nuevas ideas y construir portafolios digitales dentro de una comunidad colaborativa.
 
-El sistema está inspirado en plataformas modernas de exploración creativa como Behance y Pinterest, proporcionando una experiencia enfocada en la visualización de contenido, la interacción social y el descubrimiento de proyectos mediante categorías, filtros y tendencias.
+El sistema está inspirado en plataformas modernas de exploración creativa como Pinterest, proporcionando una experiencia enfocada en la visualización de contenido, la interacción social y el descubrimiento de proyectos mediante categorías, filtros y tendencias.
 
 ---
 
@@ -41,77 +41,48 @@ La plataforma deberá permitir a los usuarios crear y publicar proyectos digital
 El sistema deberá permitir subir contenido multimedia asociado a los proyectos, incluyendo imágenes, mockups y recursos visuales.
 
 ### RF-07
-Cada proyecto deberá permitir el registro de información como título, descripción, categoría, tecnologías utilizadas, dificultad y estado de desarrollo.
+Cada proyecto deberá permitir el registro de información como título, descripción, categoría y tags.
 
 ### RF-08
-El sistema deberá permitir clasificar los proyectos según estados como idea, prototipo, en desarrollo o finalizado.
-
-### RF-09
 La plataforma deberá permitir editar o eliminar proyectos previamente publicados por el usuario.
 
-### RF-10
+### RF-09
 El sistema deberá mostrar una vista detallada de cada proyecto con toda su información organizada de manera visual e interactiva.
 
 ---
 
 ## Módulo de Exploración y Descubrimiento
 
-### RF-11
+### RF-10
 El sistema deberá ofrecer un espacio de exploración donde los usuarios puedan descubrir proyectos publicados por la comunidad.
 
-### RF-12
+### RF-11
 La plataforma deberá incluir un sistema de búsqueda mediante palabras clave relacionadas con proyectos o tecnologías.
 
-### RF-13
-El sistema deberá permitir filtrar proyectos por categoría, popularidad, dificultad, fecha de publicación y tecnologías utilizadas.
+### RF-12
+El sistema deberá permitir filtrar proyectos por categoría y/o tags.
 
-### RF-14
+### RF-13
 La plataforma deberá mostrar proyectos destacados o en tendencia según la interacción generada por los usuarios.
 
-### RF-15
+### RF-14
 El sistema deberá recomendar proyectos relacionados según categorías o intereses similares.
 
 ---
 
 ## Módulo de Interacción Social
 
-### RF-16
+### RF-15
 La plataforma deberá permitir a los usuarios comentar proyectos publicados por otros usuarios.
 
-### RF-17
+### RF-16
 El sistema deberá permitir reaccionar a proyectos mediante likes o guardarlos en favoritos.
 
-### RF-18
+### RF-17
 La plataforma deberá permitir seguir perfiles de otros usuarios para visualizar sus nuevas publicaciones.
 
-### RF-19
+### RF-18
 El sistema deberá generar notificaciones relacionadas con comentarios, seguidores e interacciones relevantes.
-
----
-
-## Módulo de Estadísticas y Dashboard
-
-### RF-20
-El sistema deberá proporcionar un dashboard personalizado donde cada usuario pueda visualizar estadísticas relacionadas con sus proyectos e interacciones.
-
-### RF-21
-El administrador deberá contar con un panel de control general para visualizar métricas globales de uso, actividad y proyectos destacados dentro de la plataforma.
-
----
-
-## Módulo Administrativo
-
-### RF-22
-El sistema deberá permitir al administrador gestionar usuarios registrados dentro de la plataforma.
-
-### RF-23
-La plataforma deberá permitir la moderación y eliminación de contenido inapropiado o que incumpla las políticas de uso.
-
-### RF-24
-El administrador deberá poder gestionar categorías, etiquetas y configuraciones generales de la plataforma.
-
-### RF-25
-El sistema deberá permitir al administrador supervisar estadísticas y reportes generales sobre el funcionamiento de la plataforma.
 
 ---
 
