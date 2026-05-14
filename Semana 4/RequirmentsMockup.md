@@ -186,6 +186,8 @@ La interfaz deberá mantener consistencia visual y funcional independientemente 
 ### Mockup Figma
 https://www.figma.com/make/gBcPmBIgBshbY7xsJ4FuXU/Design-ProjectHub-Platform?code-node-id=0-9&p=f&t=d1WyLVDUnIeyKuKF-0&fullscreen=1
 
+### Site
+https://inter-quilt-92315293.figma.site/
 ---
 
 # Interfaces del Sistema
