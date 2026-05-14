@@ -1,3 +1,19 @@
+# ProjectHub
+
+## Descripción del Proyecto
+
+ProjectHub es una plataforma web moderna orientada a la publicación, exploración y organización de proyectos digitales, mockups, prototipos e ideas creativas. La plataforma busca ofrecer un espacio visual e interactivo donde diseñadores, desarrolladores y creadores puedan compartir sus proyectos, descubrir nuevas ideas y construir portafolios digitales dentro de una comunidad colaborativa.
+
+El sistema está inspirado en plataformas modernas de exploración creativa como Behance y Pinterest, proporcionando una experiencia enfocada en la visualización de contenido, la interacción social y el descubrimiento de proyectos mediante categorías, filtros y tendencias.
+
+---
+
+# Objetivo General
+
+Desarrollar una plataforma web interactiva orientada a la publicación, organización y descubrimiento de proyectos digitales, mockups, ideas y prototipos creativos, permitiendo a los usuarios compartir sus creaciones, explorar tendencias y construir portafolios visuales dentro de una comunidad moderna y colaborativa.
+
+---
+
 # Requisitos Funcionales
 
 ## Módulo de Autenticación y Gestión de Usuarios
@@ -97,6 +113,8 @@ El administrador deberá poder gestionar categorías, etiquetas y configuracione
 ### RF-25
 El sistema deberá permitir al administrador supervisar estadísticas y reportes generales sobre el funcionamiento de la plataforma.
 
+---
+
 # Requisitos No Funcionales
 
 ## Usabilidad
@@ -118,7 +136,7 @@ La interfaz deberá mantener consistencia visual y funcional en todas las seccio
 
 ---
 
-# Rendimiento
+## Rendimiento
 
 ### RNF-06
 El sistema deberá responder a las acciones del usuario en un tiempo inferior a 2 segundos en operaciones comunes como navegación, búsquedas y carga de contenido.
@@ -134,7 +152,7 @@ La plataforma deberá minimizar tiempos de espera durante procesos de publicaci�
 
 ---
 
-# Seguridad
+## Seguridad
 
 ### RNF-10
 El sistema deberá garantizar la protección de credenciales mediante cifrado seguro de contraseñas y manejo seguro de sesiones.
@@ -150,7 +168,7 @@ La plataforma deberá restringir accesos no autorizados a funciones administrati
 
 ---
 
-# Portabilidad
+## Portabilidad
 
 ### RNF-14
 La aplicación web deberá funcionar correctamente en navegadores modernos como Google Chrome, Mozilla Firefox, Microsoft Edge y Safari.
@@ -163,67 +181,17 @@ La interfaz deberá mantener consistencia visual y funcional independientemente 
 
 ---
 
-# Escalabilidad
-
-### RNF-17
-La arquitectura del sistema deberá permitir el crecimiento progresivo de usuarios, proyectos y contenido multimedia sin afectar el funcionamiento general de la plataforma.
-
-### RNF-18
-La base de datos deberá soportar almacenamiento y administración eficiente de grandes volúmenes de información y recursos visuales.
-
----
-
-# Mantenibilidad
-
-### RNF-19
-El código fuente deberá seguir estándares de programación y buenas prácticas de desarrollo para facilitar futuras actualizaciones y mantenimiento.
-
-### RNF-20
-La aplicación deberá desarrollarse mediante una arquitectura modular que permita agregar nuevas funcionalidades sin afectar significativamente los módulos existentes.
-
-### RNF-21
-La estructura del sistema deberá facilitar la detección y corrección de errores durante futuras etapas de desarrollo.
-
----
-
-# Disponibilidad
-
-### RNF-22
-La plataforma deberá tener una disponibilidad mínima del 99% durante su funcionamiento.
-
-### RNF-23
-El sistema deberá incluir mecanismos básicos de recuperación ante fallos para minimizar pérdida de información o interrupciones del servicio.
-
----
-
-# Interoperabilidad
-
-### RNF-24
-La plataforma deberá utilizar formatos estándar para el intercambio y almacenamiento de datos.
-
-### RNF-25
-El sistema deberá permitir futuras integraciones con APIs o servicios externos relacionados con autenticación, almacenamiento o análisis de datos.
-
----
-
-# Fiabilidad
-
-### RNF-26
-El sistema deberá validar correctamente la información ingresada por los usuarios para prevenir inconsistencias en los datos almacenados.
-
-### RNF-27
-La plataforma deberá garantizar la integridad y consistencia de la información registrada dentro del sistema.
-
-### RNF-28
-El sistema deberá mantener estabilidad operativa durante procesos simultáneos de navegación, publicación e interacción de usuarios.
-
-
 # Mockup
-### Mockup Figma: 
+
+### Mockup Figma
 https://www.figma.com/make/qIzYrbRLWikN5Kkm2BL4nM/Design-ProjectHub-Creative-Platform?t=lvThxRxVcRnTdHiF-1&preview-route=%2Fproject%2F2
 
+---
+
+# Interfaces del Sistema
 
 ## Home
+
 <p align="center">
   <img src="images/image.png" width="900">
 </p>
@@ -232,28 +200,42 @@ https://www.figma.com/make/qIzYrbRLWikN5Kkm2BL4nM/Design-ProjectHub-Creative-Pla
   <img src="images/imagen2.png" width="900">
 </p>
 
+---
 
 ## Login
+
 <p align="center">
   <img src="images/imagen3.png" width="900">
 </p>
 
+---
+
 ## Principal Page
+
 <p align="center">
   <img src="images/imagen4.png" width="900">
 </p>
 
+---
+
 ## Upload Project
+
 <p align="center">
   <img src="images/imagen5.png" width="900">
 </p>
 
+---
+
 ## View Project
+
 <p align="center">
   <img src="images/imagen6.png" width="900">
 </p>
 
+---
+
 ## Profile
+
 <p align="center">
   <img src="images/imagen7.png" width="900">
 </p>
