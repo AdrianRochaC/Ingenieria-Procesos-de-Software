@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <defs>
+    <linearGradient id="projecthub-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#2563eb" />
+      <stop offset="100%" stop-color="#9333ea" />
+    </linearGradient>
+  </defs>
+  <rect width="64" height="64" rx="18" fill="url(#projecthub-gradient)" />
+  <path
+    d="M20 42V22h12c7 0 12 3.4 12 10s-5 10-12 10h-5v10h-7zm7-16v10h5c3.3 0 5-1.8 5-5s-1.7-5-5-5h-5z"
+    fill="#ffffff"
+  />
+</svg>
